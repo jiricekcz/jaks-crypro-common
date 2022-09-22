@@ -1,1 +1,1 @@
-# typescript-npm-module
+# JAKS crypto common

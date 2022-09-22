@@ -1,7 +1,7 @@
 {
-	"name": "typescript-npm-module",
+	"name": "@jaks/crypto-common",
 	"version": "1.0.0",
-	"description": "A generic typescript npm package",
+	"description": "The common declarations and code for all JAKS crypto modules.",
 	"main": "./lib/index.js",
 	"types": "lib/index.d.ts",
 	"scripts": {
@@ -15,14 +15,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/jiricekcz/typescript-npm-module.git"
+		"url": "git+https://github.com/jiricekcz/jaks-crypto-common.git"
 	},
 	"author": "jiricekcz",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/jiricekcz/typescript-npm-module/issues"
+		"url": "https://github.com/jiricekcz/jaks-crypto-common/issues"
 	},
-	"homepage": "https://github.com/jiricekcz/typescript-npm-module#readme",
+	"homepage": "https://github.com/jiricekcz/jaks-crypto-common#readme",
 	"devDependencies": {
 		"@types/node": "^17.0.10",
 		"@typescript-eslint/eslint-plugin": "^5.10.0",
