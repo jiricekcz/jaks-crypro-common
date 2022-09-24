@@ -1,6 +1,15 @@
 export const KEY_TYPES = ["EC", "RSA", "oct"] as const;
 export const KEY_USES = ["sig", "enc"] as const;
-export const KEY_OPERATIONS = ["sign", "verify", "encrypt", "decrypt", "wrapKey", "unwrapKey", "deriveKey", "deriveBits"] as const;
+export const KEY_OPERATIONS = [
+    "sign",
+    "verify",
+    "encrypt",
+    "decrypt",
+    "wrapKey",
+    "unwrapKey",
+    "deriveKey",
+    "deriveBits",
+] as const;
 
 export type KeyType = typeof KEY_TYPES[number];
 export type KeyUse = typeof KEY_USES[number];
@@ -46,7 +55,7 @@ export type JWK_EC_Private = JWK_EC_Private_Sign | JWK_EC_Private_Encrypt;
 export interface JWK_EC_Public_Sign extends JWKBase {
     kty: "EC";
     use: "sig";
-    key_ops: ("verify")[];
+    key_ops: "verify"[];
     alg: ECAlgorithm;
 
     crv: "P-256" | "P-384" | "P-521";
@@ -92,7 +101,7 @@ export type JWK_RSA_Private = JWK_RSA_Private_Sign | JWK_RSA_Private_Encrypt;
 export interface JWK_RSA_Public_Sign extends JWKBase {
     kty: "RSA";
     use: "sig";
-    key_ops: ("verify")[];
+    key_ops: "verify"[];
     alg: RSAAlgorithm;
 
     n: string;

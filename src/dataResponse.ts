@@ -1,5 +1,5 @@
 export interface DataResponse {
-    toArrayBuffer(): Promise<ArrayBuffer>
+    toArrayBuffer(): Promise<ArrayBuffer>;
 }
 
 export class StandardDataResponse {

@@ -13,42 +13,63 @@ export const KEY_TYPES = ["private", "public", "secret"] as const;
 export type KeyType = typeof KEY_TYPES[number];
 
 export type KeyAlgorithmsMap = {
-    "private": AsymmetricDSAlgorithm,
-    "public": AsymmetricDSAlgorithm,
-    "secret": SymmetricDSAlgorithm
-}
+    private: AsymmetricDSAlgorithm;
+    public: AsymmetricDSAlgorithm;
+    secret: SymmetricDSAlgorithm;
+};
 
 export abstract class CryptoClient {
     abstract sign(algorithm: AsymmetricDSAlgorithm, key: Key<"private">, data: ArrayBuffer): Promise<SignedData>;
-    abstract verify(algorithm: AsymmetricDSAlgorithm, key: Key<"public">, signature: ArrayBuffer, data: ArrayBuffer): Promise<boolean>;
+    abstract verify(
+        algorithm: AsymmetricDSAlgorithm,
+        key: Key<"public">,
+        signature: ArrayBuffer,
+        data: ArrayBuffer
+    ): Promise<boolean>;
     abstract signSymmetric(algorithm: SymmetricDSAlgorithm, key: Key<"secret">, data: ArrayBuffer): Promise<SignedData>;
-    async verifySymmetric(algorithm: SymmetricDSAlgorithm, key: Key<"secret">, signature: Signature, data: ArrayBuffer): Promise<boolean> {
+    async verifySymmetric(
+        algorithm: SymmetricDSAlgorithm,
+        key: Key<"secret">,
+        signature: Signature,
+        data: ArrayBuffer
+    ): Promise<boolean> {
         const signed = await this.signSymmetric(algorithm, key, data);
         return signed.signature.equals(signature);
     }
 
     abstract encrypt(algorithm: AsymmetricDSAlgorithm, key: Key<"public">, data: ArrayBuffer): Promise<DataResponse>;
     abstract decrypt(algorithm: AsymmetricDSAlgorithm, key: Key<"private">, data: ArrayBuffer): Promise<DataResponse>;
-    abstract encryptSymmetric(algorithm: SymmetricDSAlgorithm, key: Key<"secret">, data: ArrayBuffer): Promise<DataResponse>;
-    abstract decryptSymmetric(algorithm: SymmetricDSAlgorithm, key: Key<"secret">, data: ArrayBuffer): Promise<DataResponse>;
+    abstract encryptSymmetric(
+        algorithm: SymmetricDSAlgorithm,
+        key: Key<"secret">,
+        data: ArrayBuffer
+    ): Promise<DataResponse>;
+    abstract decryptSymmetric(
+        algorithm: SymmetricDSAlgorithm,
+        key: Key<"secret">,
+        data: ArrayBuffer
+    ): Promise<DataResponse>;
 
     abstract generateSymmetricKey(algorithm: SymmetricDSAlgorithm, use: KeyUse): Promise<Key<"secret">>;
     abstract generateAsymmetricKey(algorithm: AsymmetricDSAlgorithm, use: KeyUse): Promise<KeyPair>;
-    
 }
 export class Key<T extends KeyType> {
     protected readonly _jwk: JWK;
-    
+
     constructor(jwk: JWK) {
         this._jwk = jwk;
     }
     public get type(): T {
         if (this._jwk.kty == "oct") return "secret" as T;
-        if ((this._jwk.key_ops as KeyOperation[]).includes("sign") || (this._jwk.key_ops as KeyOperation[]).includes("decrypt")) return "private" as T;
+        if (
+            (this._jwk.key_ops as KeyOperation[]).includes("sign") ||
+            (this._jwk.key_ops as KeyOperation[]).includes("decrypt")
+        )
+            return "private" as T;
         return "public" as T;
     }
 
-    setAlgorithm(algorithm: KeyAlgorithmsMap[T]): void { 
+    setAlgorithm(algorithm: KeyAlgorithmsMap[T]): void {
         this._jwk.alg = algorithm;
     }
 
@@ -77,7 +98,6 @@ export class Key<T extends KeyType> {
     }
 }
 
-
 export class KeyPair {
     public readonly publicKey: PublicKey;
     public readonly privateKey: PrivateKey;
@@ -85,7 +105,7 @@ export class KeyPair {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
-    setAlgorithm(algorithm: KeyAlgorithmsMap["private"]): void { 
+    setAlgorithm(algorithm: KeyAlgorithmsMap["private"]): void {
         this.privateKey.setAlgorithm(algorithm);
         this.publicKey.setAlgorithm(algorithm);
     }
@@ -159,5 +179,4 @@ export class SignedData {
     get signature(): Signature {
         return this._signature;
     }
-
 }
