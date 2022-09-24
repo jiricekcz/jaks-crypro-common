@@ -1,6 +1,6 @@
 {
 	"name": "@jaks/crypto-common",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "The common declarations and code for all JAKS crypto modules.",
 	"main": "./lib/index.js",
 	"types": "lib/index.d.ts",
