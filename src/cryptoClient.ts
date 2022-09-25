@@ -50,8 +50,10 @@ export abstract class CryptoClient {
         data: ArrayBuffer
     ): Promise<DataResponse>;
 
-    abstract generateSymmetricKey(algorithm: SymmetricDSAlgorithm, use: KeyUse): Promise<Key<"secret">>;
-    abstract generateAsymmetricKey(algorithm: AsymmetricDSAlgorithm, use: KeyUse): Promise<KeyPair>;
+    abstract generateSymmetricKey(algorithm: SymmetricDSAlgorithm, use: KeyUse, keySize: number): Promise<Key<"secret">>;
+    abstract generateRSAAsymmetricKey(algorithm: RSAAlgorithm, use: KeyUse, keySize: number): Promise<KeyPair>;
+    abstract generateECAsymmetricKey(algorithm: ECAlgorithm, use: KeyUse, curve: "P-256" | "P-384" | "P-521"): Promise<KeyPair>;
+
 }
 export class Key<T extends KeyType> {
     protected readonly _jwk: JWK;
